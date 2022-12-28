@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 
-from refacto_python.gilded_rose_2 import Item, GildedRose
-
+from gilded_rose import *
 
 def main(days):
     # Créez une liste d'objets
