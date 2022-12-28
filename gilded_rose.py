@@ -101,10 +101,14 @@ class Item:
         """
         Initialise un objet avec un nom, une date de vente et une qualité.
         """
+        if quality < 0:
+            raise ValueError("La qualité ne peut pas être négative.")
+        if sell_in < 0:
+            raise ValueError("La date de vente ne peut pas être négative.")
         self.name = name
         self.sell_in = sell_in
         self.quality = quality
-
+    
     def __repr__(self):
         """
         Retourne une représentation de l'objet sous forme de chaîne de caractères.
