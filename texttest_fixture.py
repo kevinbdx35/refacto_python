@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import print_function
 
-from gilded_rose import Item, GildedRose
+from refacto_python.gilded_rose_2 import Item, GildedRose
 
 
 def main(days):

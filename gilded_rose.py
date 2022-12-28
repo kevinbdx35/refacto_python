@@ -1,10 +1,6 @@
 # -*- coding: utf-8 -*-
 
-class GildedRose(object):
-    """
-    Classe principale qui gère l'état et la qualité des objets.
-    """
-
+class GildedRose:
     def __init__(self, items):
         """
         Initialise la classe avec une liste d'objets.
@@ -29,28 +25,23 @@ class GildedRose(object):
         """
         Met à jour la qualité et l'état d'un objet "Aged Brie".
         """
-        # La qualité de l'objet augmente avec le temps
-        if item.quality < 50:
-            item.quality += 1
-        # Si l'objet a expiré, sa qualité continue d'augmenter
-        if item.sell_in < 0 and item.quality < 50:
-            item.quality += 1
+        self._increase_quality(item, 1)
+        self._update_sell_in(item, -1)
 
     def _update_backstage_passes(self, item):
         """
         Met à jour la qualité et l'état d'un objet "Backstage passes".
         """
-        # La qualité de l'objet augmente avec le temps
-        if item.quality < 50:
-            item.quality += 1
-            # La qualité augmente plus rapidement à mesure que la date de vente approche
-            if item.sell_in < 11:
-                item.quality += 1
-            if item.sell_in < 6:
-                item.quality += 1
-        # Si l'objet a expiré, sa qualité passe à zéro
-        if item.sell_in < 0:
+        if item.sell_in > 10:
+            self._increase_quality(item, 1)
+        elif item.sell_in > 5:
+            self._increase_quality(item, 2)
+        elif item.sell_in > 0:
+            self._increase_quality(item, 3)
+        else:
+            # Si l'objet a expiré, sa qualité passe à 0
             item.quality = 0
+        self._update_sell_in(item, -1)
 
     def _update_sulfuras(self, item):
         """
@@ -63,12 +54,33 @@ class GildedRose(object):
         """
         Met à jour la qualité et l'état d'un objet qui n'est ni "Aged Brie", ni "Backstage passes", ni "Sulfuras".
         """
-        # La qualité de l'objet diminue avec le temps
-        if item.quality > 0:
-            item.quality -= 1
-        # Si l'objet a expiré, sa qualité continue de diminuer
-        if item.sell_in < 0 and item.quality > 0:
-            item.quality -= 1
+        self._decrease_quality(item, 1)
+        self._update_sell_in(item, -1)
+        if item.sell_in < 0:
+            self._decrease_quality(item, 1)
+
+    def _increase_quality(self, item, amount):
+        """
+        Augmente la qualité de l'objet d'une certaine quantité, en s'assurant de ne pas dépasser la limite de 50.
+        """
+        item.quality = min(50, item.quality + amount)
+
+    def _decrease_quality(self, item, amount):
+        """
+        Diminue la qualité de l'objet d'une certaine quantité, en s'assurant de ne pas descendre en dessous de 0.
+        """
+        item.quality = max(0, item.quality - amount)
+
+    def _update_sell_in(self, item, amount):
+        """
+        Met à jour la date de vente de l'objet d'une certaine quantité.
+        """
+        item.sell_in += amount
+
+
+
+
+
 
 class Item:
     def __init__(self, name, sell_in, quality):
@@ -83,7 +95,7 @@ class Item:
         """
         Retourne une représentation de l'objet sous forme de chaîne de caractères.
         """
-        return "%s, %s, %s" % (self.name, self.sell_in, self.quality)
+        return f"{self.name}, {self.sell_in}, {self.quality}"
 
 
 if __name__ == '__main__':
@@ -103,5 +115,3 @@ if __name__ == '__main__':
     print("\nAprès la mise à jour :")
     for item in gilded_rose.items:
         print(item)
-
-
