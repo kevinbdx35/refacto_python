@@ -18,8 +18,27 @@ class GildedRose:
                 self._update_backstage_passes(item)
             elif item.name == "Sulfuras, Hand of Ragnaros":
                 self._update_sulfuras(item)
+            elif item.name == "Conjured":
+                self._update_conjured_items(item)
             else:
                 self._update_other_items(item)
+    
+    def _update_conjured_items(self, item):
+        """
+        Met à jour la qualité et l'état d'un objet "Conjured".
+        """
+        # La qualité de l'objet diminue avec le temps
+        if item.quality > 0:
+            item.quality -= 2
+        # Si l'objet a expiré, sa qualité continue de diminuer
+        if item.sell_in < 0 and item.quality > 0:
+            item.quality -= 2
+        # La qualité de l'objet ne doit pas être négative
+        if item.quality < 0:
+            item.quality = 0
+        # Mettre à jour la date de vente de l'objet
+        item.sell_in -= 1
+
 
     def _update_aged_brie(self, item):
         """
